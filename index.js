@@ -47,6 +47,10 @@ app.post('/upload', async (req, res) => {
                 file.mv('./presentations/' + req.body.prj_id + '.' + get_ext(file.name));
             }
 
+            if (req.body.type == "image") {
+                file.mv('./image/' + req.body.prj_id + '.' + get_ext(file.name));
+            }
+
             //send response
             res.send({
                 status: true,
@@ -73,6 +77,16 @@ app.get('/get-extname', async (req, res) => {
         files.forEach(file => {
             if (file.includes(req.query.prj_id)) {
                 res.status(200).send(get_ext(file))
+            }
+        })
+    })
+})
+
+app.get('/get-image', async (req, res) => {
+    fs.readdir("./images", (err, files) => {
+        files.forEach(file => {
+            if (file.includes(req.query.prj_id)) {
+                res.download("./images/"+file)
             }
         })
     })
